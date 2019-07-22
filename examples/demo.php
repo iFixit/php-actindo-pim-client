@@ -17,6 +17,9 @@ function main() {
    $pim = new Client($rpcClient);
 
    authenticate($pim, $login, $password);
+
+   demoGetBaseAttributeSetId($pim);
+   /* demoListAttributeSets($pim); */
 }
 
 // Authenticates, caching the auth token received from the server on a
@@ -35,6 +38,14 @@ function authenticate($pim, $login, $password) {
 
    $auth = $pim->login($login, $password);
    @file_put_contents($authTokenFilename, $auth);
+}
+
+function demoGetBaseAttributeSetId(Client $pim) {
+   echo "{$pim->getBaseAttributeSetId()}\n";
+}
+
+function demoListAttributeSets($pim) {
+   echo $pim->listAttributeSets();
 }
 
 main();

@@ -1,0 +1,69 @@
+{
+   "title": "List attribute sets response",
+   "description": "Response received on successful list.",
+   "type": "object",
+   "properties": {
+      "data": {
+         "description": "Array of attribute set definitions",
+         "type": "array",
+         "items": { "$ref": "#/definitions/attribute_set" }
+      },
+      "n_rows": {
+         "type": "integer",
+         "miniumum": 0
+      }
+   },
+   "required": ["data", "n_rows"],
+   "definitions": {
+      "attribute_set": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "integer",
+               "minimum": 0
+            },
+            "key": {
+               "type": "string"
+            },
+            "name": {
+               "type": "string"
+            },
+            "description": {
+               "type": "string"
+            },
+            "active": {
+               "type": "boolean"
+            },
+            "readOnly": {
+               "type": "boolean"
+            },
+            "entityType": {
+               "anyOf": [
+                  { "type": "null" },
+                  { "$ref": "#/definitions/entity_type" }
+               ]
+            },
+            "parentSet": {
+               "anyOf": [
+                  { "type": "null" },
+                  { "$ref": "#/definitions/attribute_set" }
+               ]
+            }
+         },
+         "required": ["id", "key", "active", "readOnly"]
+      },
+      "entity_type": {
+         "type": "object",
+         "properties": {
+            "id": {
+               "type": "integer",
+               "minimum": 0
+            },
+            "name": {
+               "type": "string"
+            }
+         },
+         "required": ["id", "name"]
+      }
+   }
+}
