@@ -340,14 +340,19 @@ class JsonRpcClient {
     * @throws \RuntimeException if any error is returned from the server
     */
    protected function handleJsonRpcErrors($response) {
-      if (isset($response['error'])) {
-         switch ($response['error']['code']) {
+      if (isset($response->error)) {
+         $error = $response->error;
+         switch($error->code) {
          case -32601:
-            throw new BadFunctionCallException($response['error']['message'], $response['error']['code']);
+            throw new BadFunctionCallException(
+               $error->message, $error->code);
          case -32602:
-            throw new InvalidArgumentException($response['error']['message'], $response['error']['code']);
+            throw new InvalidArgumentException(
+               $error->message, $error->code);
          default:
-            throw new RuntimeException($response['error']['message']."\nStacktrace : ".$response['error']['data']['stacktrace'], $response['error']['code']);
+            throw new RuntimeException(
+               $error->message."\nStacktrace : " . $error->data->stacktrace,
+               $error->code);
          }
       }
    }
@@ -364,7 +369,7 @@ class JsonRpcClient {
     */
    protected function parseResponse($response) {
       $this->handleJsonRpcErrors($response);
-      return isset($response['result']) ? $response['result'] : null;
+      return isset($response->result) ? $response->result : null;
    }
 
    /**
@@ -460,7 +465,7 @@ class JsonRpcClient {
          return [];
       }
 
-      $response = json_decode($response, true);
+      $response = json_decode($response);
 
       if (json_last_error() !== JSON_ERROR_NONE) {
          $jsonError = json_last_error_msg();
