@@ -390,9 +390,11 @@ class JsonRpcClient {
       return $results;
    }
 
-   protected function setRespHeader($curl, $headerLine) {
+   protected function setResponseHeader($curl, $headerLine) {
       $headerLine1 = explode(':', trim($headerLine));
-      $this->responseHeaders[array_shift($headerLine1)] = trim(implode(':', $headerLine1));
+      $headerName = array_shift($headerLine1);
+      $headerValue = trim(implode(':', $headerLine1));
+      $this->responseHeaders[$headerName] = $headerValue;
       return strlen($headerLine);
    }
 
@@ -433,7 +435,7 @@ class JsonRpcClient {
       }
 
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
-      curl_setopt($ch, CURLOPT_HEADERFUNCTION, [$this,'setRespHeader']);
+      curl_setopt($ch, CURLOPT_HEADERFUNCTION, [$this,'setResponseHeader']);
 
       $response = curl_exec($ch);
       $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
