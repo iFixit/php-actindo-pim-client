@@ -421,10 +421,11 @@ class JsonRpcClient {
       curl_setopt($ch, CURLOPT_MAXREDIRS, 2);
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
       curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->verifyPeer ? 2 : 0);
+      curl_setopt($ch, CURLOPT_VERBOSE, false);
 
       $headers = [];
       foreach ($this->httpHeaders as $key => $value) {
-         $headers[] = $key . ': ' . $value;
+         $headers[] = "{$key}: {$value}";
       }
       curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -439,11 +440,18 @@ class JsonRpcClient {
 
       $response = curl_exec($ch);
       $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+      $error = curl_error($ch);
 
       curl_close($ch);
 
+      if ($error) {
+         throw new Exception("cURL error: {$error}");
+      }
+
       if ($httpCode !== 200 && $httpCode !== 204) {
-         throw new UnexpectedValueException('Unexpected HTTP Status Code: ' . $httpCode, $httpCode);
+         throw new UnexpectedValueException(
+            "Unexpected HTTP status code: {$httpCode}",
+            $httpCode);
       }
 
       if (strlen($response) === 0) {
@@ -454,13 +462,10 @@ class JsonRpcClient {
 
       $response = json_decode($response, true);
 
-      if ($response === null) {
-         $message = 'Unable to decode json response';
-         if (json_last_error() !== JSON_ERROR_NONE) {
-            $message .= ': ' . json_last_error_msg();
-            throw new RuntimeException($message, json_last_error());
-         }
-         throw new RuntimeException($message);
+      if (json_last_error() !== JSON_ERROR_NONE) {
+         $jsonError = json_last_error_msg();
+         $message = "Unable to decode json response: {$jsonError}";
+         throw new RuntimeException($message, json_last_error());
       }
 
       return $response;
