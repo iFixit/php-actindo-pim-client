@@ -1,5 +1,5 @@
 {
-    "name": "iFixit/php-actindo-pim-client",
+    "name": "ifixit/php-actindo-pim-client",
     "description": "PHP client for the Actindo PIM",
     "type": "library",
     "require": {
