@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Actindo\Pim;
 
-use Swaggest\JsonSchema\Structure\ClassStructure;
-
 class SchemaRequest extends Request {
    private $body;
 
@@ -18,7 +16,7 @@ class SchemaRequest extends Request {
 
    public function execute(JsonRpcClient $rpcClient): Response {
       $method = $this->body::API_METHOD;
-      $response = $rpcClient->call($method, $this->body);
+      $response = $rpcClient->call($method, $this->body->toPrimitive());
       return $this->hydrateResponse($response);
    }
 

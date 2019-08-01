@@ -12,6 +12,7 @@ class SchemaBuilder {
    private $inputPath;
    private $outputPath;
    private $namespaceRoot;
+   private $classStructureClass;
    private $app;
    private $builder;
 
@@ -20,6 +21,7 @@ class SchemaBuilder {
       $builder->setInputPath(realpath(__DIR__ . '/../schema'));
       $builder->setOutputPath(realpath(__DIR__ . '/Schema'));
       $builder->setNamespaceRoot('Actindo\Pim\Schema');
+      $builder->setClassStructureClass('Actindo\Pim\ClassStructure');
       $builder->build();
    }
 
@@ -29,9 +31,9 @@ class SchemaBuilder {
       $this->builder = new \Swaggest\PhpCodeBuilder\JsonSchema\PhpBuilder();
       $this->builder->buildSetters = true;
       $this->builder->makeEnumConstants = true;
-      $this->builder->classCreatedHook =
+      $this->builder->classPreparedHook =
          new \Swaggest\PhpCodeBuilder\JsonSchema\ClassHookCallback(
-            \Closure::fromCallable([$this, 'handleClassCreated']));
+            \Closure::fromCallable([$this, 'handleClassPrepared']));
    }
 
    public function setInputPath(string $path): void {
@@ -45,6 +47,10 @@ class SchemaBuilder {
    public function setNamespaceRoot(string $namespaceRoot): void {
       $this->namespaceRoot = $namespaceRoot;
       $this->app->setNamespaceRoot($namespaceRoot, '.');
+   }
+
+   public function setClassStructureClass(string $qualifiedClassName): void {
+      $this->classStructureClass = $qualifiedClassName;
    }
 
    public function build(): void {
@@ -61,7 +67,20 @@ class SchemaBuilder {
       $this->builder->getType($swaggerSchema);
    }
 
-   private function handleClassCreated(
+   /**
+    * A hook that PhpBuilder provides to customize the class that gets
+    * generated to represent a schema-backed object. This is where our
+    * particular application can do things like set the namespace, decide on
+    * the class name, add properties, and so on.
+    *
+    * The class extends Swaggest\JsonSchema\Structure\ClassStructure by
+    * default, but that can be overriden to provide our own default behavior.
+    *
+    * There is also a classCreatedHook, but that gets called before the library
+    * sets the base class, so the base class that we try to set gets
+    * overridden.
+    */
+   private function handleClassPrepared(
       PhpClass $class,
       string $path,
       Schema $schema
@@ -69,6 +88,13 @@ class SchemaBuilder {
       $class->setNamespace($this->namespaceRoot);
       $class->setName($this->buildClassNameFromPath($path));
 
+      if ($this->classStructureClass) {
+         $class->setExtends(PhpClass::byFQN($this->classStructureClass));
+      }
+
+      // If we decide that the schema looks like it defines a request body,
+      // then we add some special behavior to help our library associate the
+      // body with the right JSON RPC method and the expected response schema.
       if ($this->isRequest($path)) {
          // Treat the `_method` property as the JSON RPC method that accepts
          // the schema object as an argument. It's required for request
@@ -79,8 +105,8 @@ class SchemaBuilder {
          }
          $class->addConstant(new PhpConstant('API_METHOD', $schema->_method));
 
-         // If the schema has a `_response_class` metadata property, treat it
-         // as a class that can hydrate a raw JSON response to this request.
+         // Treat the `_response_class` property as a class that can hydrate a
+         // raw JSON response to this request.
          $responseClass = $schema->_response_class;
          if (!$responseClass) {
             throw new \Exception("Missing _response_class property in '$path'");
