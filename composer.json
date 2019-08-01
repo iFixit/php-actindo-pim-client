@@ -6,12 +6,6 @@
         "swaggest/json-schema": "^0.12.11",
         "swaggest/php-code-builder": "^0.2.6"
     },
-    "authors": [
-        {
-            "name": "Shawn Tice",
-            "email": "shawn@ifixit.com"
-        }
-    ],
     "autoload": {
        "psr-4": {
           "Actindo\\Pim\\": "src"
@@ -21,5 +15,11 @@
        "post-install-cmd": [
           "Actindo\\Pim\\SchemaBuilder::run"
        ]
-    }
+    },
+    "authors": [
+        {
+            "name": "Shawn Tice",
+            "email": "shawn@ifixit.com"
+        }
+    ]
 }
