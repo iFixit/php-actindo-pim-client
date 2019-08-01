@@ -17,7 +17,8 @@
     "scripts": {
        "post-install-cmd": [
           "Actindo\\Pim\\SchemaBuilder::run"
-       ]
+       ],
+       "test": "phpunit --bootstrap vendor/autoload.php tests"
     },
     "authors": [
         {
