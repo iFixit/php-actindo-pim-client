@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e33bbef31a7d4bcbecf649b4b68a0dcc",
+    "content-hash": "323089398e9db257c09f2a01e5b74ce0",
     "packages": [
         {
             "name": "php-yaoi/php-yaoi",
@@ -144,20 +144,20 @@
         },
         {
             "name": "swaggest/code-builder",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swaggest/code-builder.git",
-                "reference": "08fd7f2d8b4e7c52a37153abd31c014dab12351b"
+                "reference": "5ae06c6dd5f2d6ae38a583942ac9382f60196a25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swaggest/code-builder/zipball/08fd7f2d8b4e7c52a37153abd31c014dab12351b",
-                "reference": "08fd7f2d8b4e7c52a37153abd31c014dab12351b",
+                "url": "https://api.github.com/repos/swaggest/code-builder/zipball/5ae06c6dd5f2d6ae38a583942ac9382f60196a25",
+                "reference": "5ae06c6dd5f2d6ae38a583942ac9382f60196a25",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0",
+                "php": ">=5.4.0",
                 "php-yaoi/php-yaoi": "*",
                 "psr/log": "^1.0.1"
             },
@@ -187,7 +187,7 @@
             "keywords": [
                 "library"
             ],
-            "time": "2018-05-02T09:13:55+00:00"
+            "time": "2019-08-01T06:33:01+00:00"
         },
         {
             "name": "swaggest/json-diff",
@@ -276,16 +276,16 @@
         },
         {
             "name": "swaggest/php-code-builder",
-            "version": "v0.2.6",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/swaggest/php-code-builder.git",
-                "reference": "51b71e8e7ea48792c9948a3ce88ef84af91d8b89"
+                "url": "https://github.com/sctice/php-code-builder.git",
+                "reference": "8ab16c9a3f75391abdce65dce8f271bf8e8e505c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swaggest/php-code-builder/zipball/51b71e8e7ea48792c9948a3ce88ef84af91d8b89",
-                "reference": "51b71e8e7ea48792c9948a3ce88ef84af91d8b89",
+                "url": "https://api.github.com/repos/sctice/php-code-builder/zipball/8ab16c9a3f75391abdce65dce8f271bf8e8e505c",
+                "reference": "8ab16c9a3f75391abdce65dce8f271bf8e8e505c",
                 "shasum": ""
             },
             "require": {
@@ -303,7 +303,16 @@
                     "Swaggest\\PhpCodeBuilder\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Swaggest\\PhpCodeBuilder\\Tests\\": "tests/src/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "php -dxdebug.coverage_enable=1 ./vendor/bin/phpunit --coverage-text"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -319,7 +328,10 @@
             "keywords": [
                 "library"
             ],
-            "time": "2019-06-22T20:27:43+00:00"
+            "support": {
+                "source": "https://github.com/sctice/php-code-builder/tree/master"
+            },
+            "time": "2019-08-02T13:14:11+00:00"
         }
     ],
     "packages-dev": [
@@ -998,16 +1010,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.2.5",
+            "version": "8.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "c1b8534b3730f20f58600124129197bf1183dc92"
+                "reference": "21461ce5b162d0f1a0fa658e27f975517c5d4234"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c1b8534b3730f20f58600124129197bf1183dc92",
-                "reference": "c1b8534b3730f20f58600124129197bf1183dc92",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/21461ce5b162d0f1a0fa658e27f975517c5d4234",
+                "reference": "21461ce5b162d0f1a0fa658e27f975517c5d4234",
                 "shasum": ""
             },
             "require": {
@@ -1023,7 +1035,7 @@
                 "phar-io/version": "^2.0.1",
                 "php": "^7.2",
                 "phpspec/prophecy": "^1.8.1",
-                "phpunit/php-code-coverage": "^7.0.5",
+                "phpunit/php-code-coverage": "^7.0.7",
                 "phpunit/php-file-iterator": "^2.0.2",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^2.1.2",
@@ -1051,7 +1063,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "8.2-dev"
+                    "dev-master": "8.3-dev"
                 }
             },
             "autoload": {
@@ -1077,7 +1089,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-07-15T06:26:24+00:00"
+            "time": "2019-08-02T07:54:25+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -1846,7 +1858,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "swaggest/php-code-builder": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
