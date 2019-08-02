@@ -3,10 +3,12 @@ declare(strict_types = 1);
 
 namespace Actindo\Pim;
 
-use \Swaggest\PhpCodeBuilder\PhpClass;
-use \Swaggest\PhpCodeBuilder\PhpConstant;
-use \Swaggest\PhpCodeBuilder\PhpCode;
-use \Swaggest\JsonSchema\Schema;
+use Swaggest\PhpCodeBuilder\PhpClass;
+use Swaggest\PhpCodeBuilder\PhpConstant;
+use Swaggest\PhpCodeBuilder\PhpCode;
+use Swaggest\JsonSchema\Schema;
+
+use Actindo\Pim\Exception\InvalidRequestSchema;
 
 class SchemaBuilder {
    private $inputPath;
@@ -101,7 +103,8 @@ class SchemaBuilder {
          // schemas.
          $method = $schema->_method;
          if (!$method) {
-            throw new \Exception("Missing _method property in '$path'");
+            throw new InvalidRequestSchema(
+               "Missing _method property in '$path'");
          }
          $class->addConstant(new PhpConstant('API_METHOD', $schema->_method));
 
@@ -109,7 +112,8 @@ class SchemaBuilder {
          // raw JSON response to this request.
          $responseClass = $schema->_response_class;
          if (!$responseClass) {
-            throw new \Exception("Missing _response_class property in '$path'");
+            throw new InvalidRequestSchema(
+               "Missing _response_class property in '$path'");
          }
          $class->addConstant(new PhpConstant('RESPONSE_CLASS', $responseClass));
       }

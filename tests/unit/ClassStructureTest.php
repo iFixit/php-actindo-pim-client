@@ -3,7 +3,10 @@ declare(strict_types = 1);
 
 use PHPUnit\Framework\TestCase;
 
+use Swaggest\JsonSchema\InvalidValue;
+
 use Actindo\Pim\Schema\LoginRequest;
+use Actindo\Pim\Exception\InvalidProperty;
 
 class ClassStructureTest extends TestCase {
    public function testAccessingValidProperty() {
@@ -15,13 +18,13 @@ class ClassStructureTest extends TestCase {
    }
 
    public function testGettingInvalidProperty() {
-      $this->expectException(Exception::class);
+      $this->expectException(InvalidProperty::class);
       $body = new LoginRequest;
       $x = $body->invalidProperty;
    }
 
    public function testSettingInvalidProperty() {
-      $this->expectException(Exception::class);
+      $this->expectException(InvalidProperty::class);
       $body = new LoginRequest;
       $body->invalidProperty = 1;
    }
@@ -45,14 +48,14 @@ class ClassStructureTest extends TestCase {
    }
 
    public function testSchemaValidationOnExportToPrimitive() {
-      $this->expectException(\Swaggest\JsonSchema\InvalidValue::class);
+      $this->expectException(InvalidValue::class);
       // Login must be a string.
       $body = (new LoginRequest)->setLogin(123)->setPass('pass');
       $body->toPrimitive();
    }
 
    public function testSchemaValidationOnExportToJson() {
-      $this->expectException(\Swaggest\JsonSchema\InvalidValue::class);
+      $this->expectException(InvalidValue::class);
       $body = (new LoginRequest)->setLogin(123)->setPass('pass');
       $body->toJson();
    }

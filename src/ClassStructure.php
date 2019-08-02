@@ -6,6 +6,8 @@ namespace Actindo\Pim;
 use Swaggest\JsonSchema\Structure\ClassStructure as SwaggestClassStructure;
 use Swaggest\JsonSchema\Context;
 
+use Actindo\Pim\Exception\InvalidProperty;
+
 /**
  * Our own wrapper around the Swaggest ClassStructure that doesn't allow
  * setting/getting properties that aren't in the schema. It also provides a few
@@ -38,14 +40,14 @@ abstract class ClassStructure extends SwaggestClassStructure {
          self::$setOnlyDefinedProperties
          && !$this->properties()->offsetExists($property)
       ) {
-         throw new \Exception("Unsupported property: $property");
+         throw new InvalidProperty($property);
       }
       parent::__set($property, $value);
    }
 
    public function &__get($property) {
       if (!$this->properties()->offsetExists($property)) {
-         throw new \Exception("Unsupported property: $property");
+         throw new InvalidProperty($property);
       }
       return parent::__get($property);
    }

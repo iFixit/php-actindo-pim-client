@@ -41,10 +41,11 @@ class Client {
          $this->pagination()->limit(2))->getBody();
 
       if (!$body->data) {
-         throw new \Exception("Failed to find attribute set 'pim_base_set'");
+         throw new InvalidBaseAttributeSet(
+            "Failed to find attribute set 'pim_base_set'");
       } else if (count($body->data) > 1) {
-         // There should only be one 'pim_base_set'.
-         throw new \Exception("2+ attribute sets with key 'pim_base_set'");
+         throw new InvalidBaseAttributeSet(
+            "2+ attribute sets with key 'pim_base_set' (1 expected)");
       }
 
       return $body->data[0]->id;
