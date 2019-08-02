@@ -8,10 +8,15 @@ use Actindo\Pim\JsonRpcClient;
 use Actindo\Pim\Client;
 
 function main() {
-   // You'll need these defined correctly in your environment to proceed.
    $sandboxUrl = getenv('ACTINDO_SANDBOX_URL');
    $login = getenv('ACTINDO_LOGIN');
    $password = getenv('ACTINDO_PASSWORD');
+
+   if (!$sandboxUrl || !$login || !$password) {
+      throw new RuntimeException(
+         'Missing one of ACTINDO_SANDBOX_URL, ACTINDO_LOGIN, or ' .
+         'ACTINDO_PASSWORD in environment. Did you export them?');
+   }
 
    $rpcClient = new JsonRpcClient($sandboxUrl);
    $pim = new Client($rpcClient);
