@@ -9,6 +9,7 @@ use Swaggest\PhpCodeBuilder\PhpCode;
 use Swaggest\JsonSchema\Schema;
 
 use Actindo\Pim\Exception\InvalidRequestSchema;
+use Actindo\Pim\Exception\InvalidOutputPath;
 
 class SchemaBuilder {
    private $inputPath;
@@ -20,8 +21,8 @@ class SchemaBuilder {
 
    public static function run(): void {
       $builder = new self();
-      $builder->setInputPath(realpath(__DIR__ . '/../schema'));
-      $builder->setOutputPath(realpath(__DIR__ . '/Schema'));
+      $builder->setInputPath(__DIR__ . '/../schema');
+      $builder->setOutputPath(__DIR__ . '/Schema');
       $builder->setNamespaceRoot('Actindo\Pim\Schema');
       $builder->setClassStructureClass('Actindo\Pim\ClassStructure');
       $builder->build();
@@ -44,6 +45,10 @@ class SchemaBuilder {
 
    public function setOutputPath(string $path): void {
       $this->outputPath = $path;
+      if (!(is_writable($path) || mkdir($path))) {
+         // Cannot find or create writable directory.
+         throw new InvalidOutputPath($path);
+      }
    }
 
    public function setNamespaceRoot(string $namespaceRoot): void {

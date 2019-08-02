@@ -1,3 +1,0 @@
-This directory holds auto-generated JSON Schema PHP classes. This file forces
-git to keep the directory even when we ignore all of the auto-generated files
-that it contains.
