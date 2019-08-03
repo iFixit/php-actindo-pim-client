@@ -1,4 +1,4 @@
 vendor/
 /src/Schema/*.php
 /examples/.auth-token
-/examples/ENV
+/examples/ENVIRONMENT
