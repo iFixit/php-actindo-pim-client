@@ -11,10 +11,8 @@ class Filters {
       return $this;
    }
 
-   public function apply(Request $request): void {
-      if ($this->filters) {
-         $request->set('filter', $this->filters);
-      }
+   public function toArray(): array {
+      return $this->filters;
    }
 
    private function makeFilter(

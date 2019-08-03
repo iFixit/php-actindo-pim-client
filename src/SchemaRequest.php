@@ -4,25 +4,36 @@ declare(strict_types = 1);
 namespace Actindo\Pim;
 
 class SchemaRequest extends Request {
-   private $body;
+   private $arg;
+   private $filters;
+   private $pagination;
 
-   public function __construct(ClassStructure $body) {
-      $this->body = $body;
+   public function __construct(ClassStructure $arg) {
+      $this->arg = $arg;
    }
 
-   public function set(string $property, $value): void {
-      $this->body->{$property} = $value;
+   public function setFilters(Filters $filters): self {
+      $this->filters = $filters;
+      $this->arg->setFilter($filters->toArray());
+      return $this;
    }
 
-   public function execute(JsonRpcClient $rpcClient): Response {
-      $method = $this->body::API_METHOD;
-      $response = $rpcClient->call($method, $this->body->toPrimitive());
-      return $this->hydrateResponse($response);
+   public function setPagination(Pagination $pagination): self {
+      $this->pagination = $pagination;
+      $this->arg->setStart($pagination->getStart());
+      $this->arg->setLimit($pagination->getLimit());
+      return $this;
    }
 
-   private function hydrateResponse($responseBody): Response {
-      $responseClass = $this->body::RESPONSE_CLASS;
-      $hydratedResponseBody = $responseClass::import($responseBody);
-      return new Response($hydratedResponseBody);
+   public function getMethod(): string {
+      return $this->arg::API_METHOD;
+   }
+
+   public function getArg() {
+      return $this->arg->toPrimitive();
+   }
+
+   public function getResponseClass(): string {
+      return $this->arg::RESPONSE_CLASS;
    }
 }

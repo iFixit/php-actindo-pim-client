@@ -26,8 +26,11 @@ class Pagination {
       $this->limit = $n;
    }
 
-   public function apply(Request $request): void {
-      $request->set('start', $this->start);
-      $request->set('limit', $this->limit);
+   public function getStart(): int {
+      return $this->start;
+   }
+
+   public function getLimit(): int {
+      return $this->limit;
    }
 }
