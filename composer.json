@@ -24,7 +24,11 @@
        "post-install-cmd": [
           "Actindo\\Pim\\SchemaBuilder::run"
        ],
-       "test": "phpunit --bootstrap vendor/autoload.php tests"
+       "lint": "git ls-files '*.php' | xargs -n1 php -l",
+       "test": [
+          "@lint",
+          "phpunit --bootstrap vendor/autoload.php tests"
+       ]
     },
     "authors": [
         {
