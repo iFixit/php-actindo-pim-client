@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "323089398e9db257c09f2a01e5b74ce0",
+    "content-hash": "aa918293da89b5b1eb739ece312855e1",
     "packages": [
         {
             "name": "php-yaoi/php-yaoi",
@@ -276,16 +276,16 @@
         },
         {
             "name": "swaggest/php-code-builder",
-            "version": "dev-master",
+            "version": "v0.2.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/sctice/php-code-builder.git",
-                "reference": "8ab16c9a3f75391abdce65dce8f271bf8e8e505c"
+                "url": "https://github.com/swaggest/php-code-builder.git",
+                "reference": "0f383ef1abc850584db15eafd7ca2bb4746fb204"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sctice/php-code-builder/zipball/8ab16c9a3f75391abdce65dce8f271bf8e8e505c",
-                "reference": "8ab16c9a3f75391abdce65dce8f271bf8e8e505c",
+                "url": "https://api.github.com/repos/swaggest/php-code-builder/zipball/0f383ef1abc850584db15eafd7ca2bb4746fb204",
+                "reference": "0f383ef1abc850584db15eafd7ca2bb4746fb204",
                 "shasum": ""
             },
             "require": {
@@ -303,16 +303,7 @@
                     "Swaggest\\PhpCodeBuilder\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Swaggest\\PhpCodeBuilder\\Tests\\": "tests/src/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "php -dxdebug.coverage_enable=1 ./vendor/bin/phpunit --coverage-text"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -328,10 +319,7 @@
             "keywords": [
                 "library"
             ],
-            "support": {
-                "source": "https://github.com/sctice/php-code-builder/tree/master"
-            },
-            "time": "2019-08-02T13:14:11+00:00"
+            "time": "2019-08-03T12:34:04+00:00"
         }
     ],
     "packages-dev": [
@@ -1858,9 +1846,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "swaggest/php-code-builder": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
