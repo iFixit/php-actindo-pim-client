@@ -6,7 +6,7 @@ namespace Actindo\Pim;
 class Filters {
    private $filters = [];
 
-   public function equals(string $property, string $value): self {
+   public function equals(string $property, $value): self {
       $this->filters[] = $this->makeFilter($property, '=', $value);
       return $this;
    }
