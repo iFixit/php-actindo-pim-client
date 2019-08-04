@@ -3,7 +3,7 @@
    "description": "A request to log in with a user and password.",
    "type": "object",
    "_method": "Actindo.CoreModules.Auth.Auth.login",
-   "_response_class": "\\Actindo\\Pim\\Schema\\LoginResponse",
+   "_response_class": "Actindo\\Pim\\Schema\\LoginResponse",
    "properties": {
       "login": {
          "description": "Username",

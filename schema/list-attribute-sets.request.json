@@ -1,7 +1,7 @@
 {
    "title": "List attribute sets",
    "_method": "Actindo.Modules.Actindo.DataHub.AttributeSets.get",
-   "_response_class": "\\Actindo\\Pim\\Schema\\ListAttributeSetsResponse",
+   "_response_class": "Actindo\\Pim\\Schema\\ListAttributeSetsResponse",
    "type": "object",
    "properties": {
       "filter": { "$ref": "filters.json" },
