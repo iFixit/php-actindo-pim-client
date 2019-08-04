@@ -6,9 +6,10 @@ namespace Actindo\Pim;
 class Middleware {
    /**
     * Modifies a request on its way down the HandlerStack to being handled
-    * (executed).
+    * (executed). The original request may be entirely replaced with a new one.
     */
-   public function prepare(Request $request): void {
+   public function prepare(Request $request): Request {
+      return $request;
    }
 
    /**

@@ -34,7 +34,7 @@ class HandlerStack {
       $topDown = array_reverse($bottomUp);
 
       foreach ($topDown as $key) {
-         $this->middleware[$key]->prepare($request);
+         $request = $this->middleware[$key]->prepare($request);
       }
 
       $response = $this->handler->handle($request);
