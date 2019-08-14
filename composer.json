@@ -1,0 +1,33 @@
+{
+   "name": "ifixit/php-actindo-pim-client",
+   "description": "PHP client for the Actindo PIM",
+   "type": "library",
+   "require": {
+      "swaggest/json-schema": "^0.12.11",
+      "swaggest/php-code-builder": "^0.2.7"
+   },
+   "require-dev": {
+      "phpunit/phpunit": "^8.2"
+   },
+   "autoload": {
+      "psr-4": {
+         "Actindo\\Pim\\": "src"
+      }
+   },
+   "scripts": {
+      "post-install-cmd": [
+         "Actindo\\Pim\\SchemaBuilder::run"
+      ],
+      "lint": "git ls-files '*.php' | xargs -n1 php -l",
+      "test": [
+         "@lint",
+         "phpunit --bootstrap vendor/autoload.php tests"
+      ]
+   },
+   "authors": [
+      {
+         "name": "Shawn Tice",
+         "email": "shawn@ifixit.com"
+      }
+   ]
+}

@@ -1,5 +1,9 @@
 <?php
 
+namespace Actindo\Pim;
+
+use Actindo\Pim\Exception\JsonRpcException;
+
 /**
  * Class JsonRpcClient
  *
@@ -17,7 +21,7 @@
  *       'arg1' => 'value',
  *       'arg2' => 'other value',
  *    ]);
- * } catch (\Exception $e) {
+ * } catch (JsonRpcException $e) {
  *     // handle errors
  * }
  *
@@ -165,11 +169,11 @@ class JsonRpcClient {
     *
     * @return array all batch requests that were discarded
     *
-    * @throws \Exception if there is currently no batch operation in progress
+    * @throws JsonRpcException if there is currently no batch operation in progress
     */
    public function discardBatch() {
       if (!$this->isBatch) {
-         throw new Exception('Client is not in batch mode, start a batch operation by calling startBatch() first');
+         throw new JsonRpcException('Client is not in batch mode, start a batch operation by calling startBatch() first');
       }
 
       $batchRequests = $this->batchRequests;
@@ -185,16 +189,16 @@ class JsonRpcClient {
     *
     * @return array an array of responses
     *
-    * @throws \Exception if we're not in batch mode or if no batch requests are
+    * @throws JsonRpcException if we're not in batch mode or if no batch requests are
     *    queued
     */
    public function executeBatch() {
       if (!$this->isBatch) {
-         throw new Exception('Client is not in batch mode, start a batch operation by calling startBatch() first');
+         throw new JsonRpcException('Client is not in batch mode, start a batch operation by calling startBatch() first');
       }
 
       if (empty($this->batchRequests)) {
-         throw new Exception('No batch requests are attached. Use call() first');
+         throw new JsonRpcException('No batch requests are attached. Use call() first');
       }
 
       $batchRequests = $this->batchRequests;
@@ -208,11 +212,11 @@ class JsonRpcClient {
     *
     * @return $this
     *
-    * @throws \Exception if a batch operation is already in progress
+    * @throws JsonRpcException if a batch operation is already in progress
     */
    public function startBatch() {
       if ($this->isBatch) {
-         throw new Exception('Batch operation already in progress, execute it by calling executeBatch() or cancel it by calling discardBatch()');
+         throw new JsonRpcException('Batch operation already in progress, execute it by calling executeBatch() or cancel it by calling discardBatch()');
       }
 
       $this->batchRequests = [];
@@ -334,20 +338,24 @@ class JsonRpcClient {
     *
     * @param array $response json rpc response of a single request
     *
-    * @throws \BadFunctionCallException if the called method does not exist
-    * @throws \InvalidArgumentException if the given arguments do not match the
+    * @throws JsonRpcException if the called method does not exist
+    * @throws JsonRpcException if the given arguments do not match the
     *    method signature
-    * @throws \RuntimeException if any error is returned from the server
+    * @throws JsonRpcException if any error is returned from the server
     */
    protected function handleJsonRpcErrors($response) {
-      if (isset($response['error'])) {
-         switch ($response['error']['code']) {
+      if (isset($response->error)) {
+         $error = $response->error;
+         switch($error->code) {
          case -32601:
-            throw new BadFunctionCallException($response['error']['message'], $response['error']['code']);
+            throw new JsonRpcException($error->message, $error->code);
          case -32602:
-            throw new InvalidArgumentException($response['error']['message'], $response['error']['code']);
+            throw new JsonRpcException(
+               $error->message, $error->code);
          default:
-            throw new RuntimeException($response['error']['message']."\nStacktrace : ".$response['error']['data']['stacktrace'], $response['error']['code']);
+            throw new JsonRpcException(
+               $error->message."\nStacktrace : " . $error->data->stacktrace,
+               $error->code);
          }
       }
    }
@@ -364,7 +372,7 @@ class JsonRpcClient {
     */
    protected function parseResponse($response) {
       $this->handleJsonRpcErrors($response);
-      return isset($response['result']) ? $response['result'] : null;
+      return isset($response->result) ? $response->result : null;
    }
 
    /**
@@ -382,7 +390,7 @@ class JsonRpcClient {
       foreach ($responses as $response) {
          try {
             $results[] = $this->parseResponse($response);
-         } catch (Exception $e) {
+         } catch (JsonRpcException $e) {
             $results[] = $e;
          }
       }
@@ -390,9 +398,11 @@ class JsonRpcClient {
       return $results;
    }
 
-   protected function setRespHeader($curl, $headerLine) {
+   protected function setResponseHeader($curl, $headerLine) {
       $headerLine1 = explode(':', trim($headerLine));
-      $this->responseHeaders[array_shift($headerLine1)] = trim(implode(':', $headerLine1));
+      $headerName = array_shift($headerLine1);
+      $headerValue = trim(implode(':', $headerLine1));
+      $this->responseHeaders[$headerName] = $headerValue;
       return strlen($headerLine);
    }
 
@@ -405,7 +415,7 @@ class JsonRpcClient {
     *    a json-rpc-response)
     *
     * @throws Exception if the request could not be sent to the json-rpc-endpoint
-    * @throws RuntimeException if the response can not be json-decoded
+    * @throws JsonRpcException if the response can not be json-decoded
     */
    protected function performRequest($request) {
       $this->responseHeaders = [];
@@ -419,10 +429,11 @@ class JsonRpcClient {
       curl_setopt($ch, CURLOPT_MAXREDIRS, 2);
       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->verifyPeer);
       curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->verifyPeer ? 2 : 0);
+      curl_setopt($ch, CURLOPT_VERBOSE, false);
 
       $headers = [];
       foreach ($this->httpHeaders as $key => $value) {
-         $headers[] = $key . ': ' . $value;
+         $headers[] = "{$key}: {$value}";
       }
       curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
@@ -433,15 +444,22 @@ class JsonRpcClient {
       }
 
       curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($request));
-      curl_setopt($ch, CURLOPT_HEADERFUNCTION, [$this,'setRespHeader']);
+      curl_setopt($ch, CURLOPT_HEADERFUNCTION, [$this,'setResponseHeader']);
 
       $response = curl_exec($ch);
       $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+      $error = curl_error($ch);
 
       curl_close($ch);
 
+      if ($error) {
+         throw new JsonRpcException("cURL error: {$error}");
+      }
+
       if ($httpCode !== 200 && $httpCode !== 204) {
-         throw new UnexpectedValueException('Unexpected HTTP Status Code: ' . $httpCode, $httpCode);
+         throw new JsonRpcException(
+            "Unexpected HTTP status code: {$httpCode}",
+            $httpCode);
       }
 
       if (strlen($response) === 0) {
@@ -450,15 +468,12 @@ class JsonRpcClient {
          return [];
       }
 
-      $response = json_decode($response, true);
+      $response = json_decode($response);
 
-      if ($response === null) {
-         $message = 'Unable to decode json response';
-         if (json_last_error() !== JSON_ERROR_NONE) {
-            $message .= ': ' . json_last_error_msg();
-            throw new RuntimeException($message, json_last_error());
-         }
-         throw new RuntimeException($message);
+      if (json_last_error() !== JSON_ERROR_NONE) {
+         $jsonError = json_last_error_msg();
+         $message = "Unable to decode json response: {$jsonError}";
+         throw new JsonRpcException($message, json_last_error());
       }
 
       return $response;

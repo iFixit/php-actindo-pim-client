@@ -1,0 +1,17 @@
+{
+   "title": "List attribute sets",
+   "_method": "Actindo.Modules.Actindo.DataHub.AttributeSets.get",
+   "_response_class": "Actindo\\Pim\\Schema\\ListAttributeSetsResponse",
+   "type": "object",
+   "properties": {
+      "filter": { "$ref": "filters.json" },
+      "start": {
+         "type": "integer",
+         "minimum": 0
+      },
+      "limit": {
+         "type": "integer",
+         "minimum": 1
+      }
+   }
+}

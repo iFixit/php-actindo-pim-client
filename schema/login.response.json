@@ -1,0 +1,13 @@
+{
+   "title": "Login response",
+   "description": "Response received on successful login.",
+   "type": "object",
+   "properties": {
+      "sessionId": {
+         "description": "Authentication token",
+         "type": "string",
+         "minLength": 1
+      }
+   },
+   "required": ["sessionId"]
+}

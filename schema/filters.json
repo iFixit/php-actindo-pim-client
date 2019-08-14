@@ -1,0 +1,24 @@
+{
+   "title": "Filters",
+   "description": "Filters for narrowing list requests.",
+   "type": "array",
+   "items": { "$ref": "#/definitions/filter" },
+   "definitions": {
+      "filter": {
+         "type": "object",
+         "properties": {
+            "property": {
+               "type": "string",
+               "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+            },
+            "operator": {
+               "type": "string",
+               "enum": ["="]
+            },
+            "value": {
+               "type": ["string", "number", "boolean"]
+            }
+         }
+      }
+   }
+}
