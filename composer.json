@@ -22,7 +22,8 @@
       "test": [
          "@lint",
          "phpunit --bootstrap vendor/autoload.php tests"
-      ]
+      ],
+      "demo": "./build-schema.php && cd example && ./demo.php"
    },
    "authors": [
       {
