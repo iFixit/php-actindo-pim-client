@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 namespace Actindo\Pim;
+use Actindo\Pim\Schema\ProductSaveRequest;
 
 class Client {
    private $handlerStack;
@@ -50,6 +51,10 @@ class Client {
    ): Response {
       $request = new SchemaRequest(new Schema\ListAttributeSetsRequest);
       return $this->executeListRequest($request, $filters, $pagination);
+   }
+
+   public function productSave(ProductSaveRequest $request): Response {
+      return $this->executeRequest(new SchemaRequest($request));
    }
 
    private function executeListRequest(

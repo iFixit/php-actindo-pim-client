@@ -1,0 +1,82 @@
+{
+   "title": "Save a Product",
+   "_method": "Actindo.Modules.Actindo.PIM.PIM.save",
+   "_response_class": "Actindo\\Pim\\Schema\\ProductSaveResponse",
+   "type": "object",
+   "properties": {
+      "entityId": {
+         "type": "integer",
+         "minimum": 0
+      },
+      "attributeSetId": {
+         "type": "integer",
+         "minimum": 1
+      },
+      "dhValues": { "$ref": "#/definitions/dhValues" },
+      "sku": {
+         "type": "string"
+      }
+   },
+   "definitions": {
+      "dhValues": {
+         "type": "object",
+         "properties": {
+            "DataHubpim_art_name__actindo_basic__de": {
+               "type": "string"
+            },
+            "DataHubpim_art_name__actindo_basic__de-DE": {
+               "type": "string"
+            },
+            "DataHubpim_art_name__actindo_basic__fr-FR": {
+               "type": "string"
+            },
+            "DataHubpim_art_name__actindo_basic__en-EN": {
+               "type": "string"
+            },
+            "DataHubpim_long_text__de-DE": {
+               "type": "string"
+            },
+            "DataHubpim_long_text__fr-FR": {
+               "type": "string"
+            },
+            "DataHubpim_long_text__en-EN": {
+               "type": "string"
+            },
+            "DataHubpim_ean": {
+               "type": "string"
+            },
+            "DataHubpim_customs_number": {
+               "type": "string"
+            },
+            "DataHubpim_products_meta_description__actindo_basic__de-DE": {
+               "type": "string"
+            },
+            "DataHubpim_products_meta_description__actindo_basic__fr-FR": {
+               "type": "string"
+            },
+            "DataHubpim_products_meta_description__actindo_basic__en-EN": {
+               "type": "string"
+            },
+            "DataHubpim_products_description__actindo_basic__de-DE": {
+               "type": "string"
+            },
+            "DataHubpim_products_description__actindo_basic__fr-FR": {
+               "type": "string"
+            },
+            "DataHubpim_products_description__actindo_basic__en-EN": {
+               "type": "string"
+            },
+            "DataHubpim_products_short_description__actindo_basic__de-DE": {
+               "type": "string"
+            },
+            "DataHubpim_products_short_description__actindo_basic__fr-FR": {
+               "type": "string"
+            },
+            "DataHubpim_products_short_description__actindo_basic__en-EN": {
+               "type": "string"
+            }
+         }
+      }
+   },
+   "required": ["entityId"]
+}

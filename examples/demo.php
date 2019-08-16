@@ -7,6 +7,8 @@ require __DIR__ . '/../vendor/autoload.php';
 use Actindo\Pim\JsonRpcClient;
 use Actindo\Pim\Client;
 use Actindo\Pim\HandlerStack;
+use Actindo\Pim\Schema\ProductSaveRequest;
+use Actindo\Pim\Schema\DhValues;
 
 define('AUTH_TOKEN_FILENAME', '.auth-token');
 
@@ -23,7 +25,8 @@ function main() {
 
    $pim = makeAuthenticatedClient($sandboxUrl, $login, $password);
 
-   demoGetBaseAttributeSetId($pim);
+   demoProductSave($pim);
+   /* demoGetBaseAttributeSetId($pim); */
    /* demoListAttributeSets($pim); */
 }
 
@@ -57,6 +60,15 @@ function demoGetBaseAttributeSetId(Client $pim) {
 
 function demoListAttributeSets($pim) {
    echo $pim->listAttributeSets();
+}
+
+function demoProductSave($pim) {
+   $req = new ProductSaveRequest();
+   $req->setEntityId(41112);
+   $values = (new DhValues())
+      ->setDataHubpimArtNameActindoBasicEnEN('Galaxy S8 LCD Screen and Digitizer TEST');
+   $req->setDhValues($values);
+   var_dump($pim->productSave($req));
 }
 
 main();

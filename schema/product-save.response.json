@@ -1,0 +1,22 @@
+{
+   "title": "product save response",
+   "description": "Response received on successful product save.",
+   "type": "object",
+   "properties": {
+      "success": {
+         "type": "bool"
+      },
+      "displayMessage": {
+         "type": "string",
+         "nullable": true
+      },
+      "displayMessageTitle": {
+         "type": "string",
+         "nullable": true
+      },
+      "error": {
+         "type": "string",
+         "nullable": true
+      }
+   }
+}
